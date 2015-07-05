@@ -1,7 +1,7 @@
 # ===================================================================
 # CMAKE のおまじない
 # ===================================================================
-cmake_minimum_required (VERSION 3.0)
+cmake_minimum_required (VERSION 3.2)
 
 
 # ===================================================================
@@ -26,6 +26,7 @@ set (YMTOOLS_NAMESPACE "nsYm")
 # オプション
 # ===================================================================
 
+# google-perftools を使う時にこのオプションを ON にする．
 option (OPT_GPERFTOOLS "use google-perftools" OFF)
 
 
@@ -44,16 +45,16 @@ include (FindDoxygen)
 
 find_package(BISON REQUIRED)
 
-include (FindPythonInterp)
-include (FindPythonLibs)
+#include (FindPythonInterp)
+#include (FindPythonLibs)
 
-include (FindQt4)
-find_package(Qt4 4.8.0 REQUIRED QtCore QtGui QtXml)
+#include (FindQt4)
+#find_package(Qt4 4.8.0 REQUIRED QtCore QtGui QtXml)
 #include(${QT_USE_FILE})
 
-set( CMAKE_INCLUDE_CURRENT_DIR ON )
-find_package(Qt5Widgets)
-find_package(OpenGL)
+#set( CMAKE_INCLUDE_CURRENT_DIR ON )
+#find_package(Qt5Widgets)
+#find_package(OpenGL)
 
 find_package(TCL)
 
@@ -253,3 +254,8 @@ install (FILES
   ${PROJECT_BINARY_DIR}/YmToolsConfig-version.cmake
   DESTINATION lib/ymtools-${YMTOOLS_VERSION}
   )
+
+
+# ===================================================================
+# end-of-CMakeLists.txt
+# ===================================================================

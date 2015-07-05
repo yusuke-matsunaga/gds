@@ -13,13 +13,16 @@
 // ymtools 用の設定
 //////////////////////////////////////////////////////////////////////
 
-// プロジェクトの major バージョン
+/// @brief プロジェクトの major バージョン
 #define YMTOOLS_VERSION_MAJIR @YMTOOLS_VERSION_MAJOR@
 
-// プロジェクトの minor バージョン
+/// @brief プロジェクトの minor バージョン
 #define YMTOOLS_VERSION_MINOR @YMTOOLS_VERSION_MINOR@
 
-// プロジェクトの名前空間
+/// @brief プロジェクトのバージョン
+#define YMTOOLS_VERSION @YMTOOLS_VERSION@
+
+/// @brief プロジェクトの名前空間
 #define YMTOOLS_NAMESPACE @YMTOOLS_NAMESPACE@
 
 
