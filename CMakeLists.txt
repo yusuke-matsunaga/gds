@@ -262,6 +262,13 @@ install (
   DESTINATION include
   )
 
+foreach ( _header "acc_user.h" "veriuser.h" "vpi_user.h" )
+  install (
+    FILES "${PROJECT_SOURCE_DIR}/include/${_header}"
+    DESTINATION include
+    )
+endforeach ()
+
 install (
   EXPORT ymtools-targets
   DESTINATION lib/ymtools-${YMTOOLS_VERSION}
