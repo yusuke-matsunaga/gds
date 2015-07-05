@@ -64,16 +64,18 @@ endif (OPT_GPERFTOOLS)
 
 find_package (GTest)
 
-include (FindBZip2)
-include (FindLibLZMA)
-include (FindZLIB)
+include (FindReadline)
 include (FindCurses)
 
-#include (FindGMP)
-
-include (FindPOPT)
-
-include (FindReadline)
+if ( UNIX )
+  set ( YM_UNIX 1 )
+endif ( UNIX )
+if ( APPLE )
+  set ( YM_APPLE 1 )
+endif ( APPLE )
+if ( WIN32 )
+  set ( YM_WIN32 1 )
+endif ( WIN32 )
 
 
 # ===================================================================

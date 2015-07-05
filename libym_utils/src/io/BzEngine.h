@@ -10,12 +10,7 @@
 
 
 #include "YmTools.h"
-
-#if defined(BZIP2_FOUND)
 #include <bzlib.h>
-#else
-#error "\"BzEngine.h\" requires <bzlib.h>"
-#endif
 
 
 BEGIN_NAMESPACE_YM

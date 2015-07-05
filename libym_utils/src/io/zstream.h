@@ -10,12 +10,7 @@
 
 
 #include "YmTools.h"
-
-#if defined(ZLIB_FOUND)
 #include <zlib.h>
-#else
-#error "\"zstream.h\" requires <zlib.h>"
-#endif
 
 
 BEGIN_NAMESPACE_YM

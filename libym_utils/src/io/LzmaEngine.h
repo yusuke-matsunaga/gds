@@ -10,12 +10,7 @@
 
 
 #include "YmTools.h"
-
-#if defined(LIBLZMA_FOUND)
 #include <lzma.h>
-#else
-#error "\"LzmaEngine.h\" requires <lzma.h>"
-#endif
 
 
 BEGIN_NAMESPACE_YM

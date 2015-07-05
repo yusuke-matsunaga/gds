@@ -29,7 +29,7 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 // System V 系では rusage() の代りに times() を使う．
 #  include <sys/param.h>
 #  include <sys/times.h>
-#elif defined(WIN32)
+#elif defined(YM_WIN32)
 #  include <windows.h>
 #  include <mmsystem.h>
 #  include <sys/types.h>
@@ -37,7 +37,9 @@ OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWA
 #else
 #  error "neither getrusage() nor times() are found."
 #endif
-
+#if defined(HAVE_SYS_TIME_H)
+#  include <sys/time.h>
+#endif
 #if defined(__linux__)
 #include <fpu_control.h>
 #endif
@@ -107,7 +109,7 @@ inline
 double
 Glueminisat::realTime()
 {
-#if defined(WIN32)
+#if defined(YM_WIN32)
   _timeb tv;
   _ftime(&tv);
   return (double)tv.time + (double)tv.millitm / 1000.0;
