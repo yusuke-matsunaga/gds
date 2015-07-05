@@ -7,32 +7,16 @@ cmake_minimum_required (VERSION 3.0)
 # ===================================================================
 # プロジェクト名，バージョンの設定
 # ===================================================================
-project (YmTools)
-set (YMTOOLS_VERSION_MAJOR 1)
-set (YMTOOLS_VERSION_MINOR 0)
-set (YMTOOLS_VERSION "${YMTOOLS_VERSION_MAJOR}.${YMTOOLS_VERSION_MINOR}")
-
-# 名前空間
-set (YMTOOLS_NAMESPACE "nsYm")
-
-# リリースモード
-#set (CMAKE_BUILD_TYPE RELEASE)
-
-# デバッグモード
-#set (CMAKE_BUILD_TYPE DEBUG)
+project (satpg)
+set (SATPG_VERSION_MAJOR 1)
+set (SATPG_VERSION_MINOR 0)
+set (SATPG_VERSION ${SATPG_VERSION_MAJOR}.${SATPG_VERSION_MINOR})
 
 
 # ===================================================================
 # オプション
 # ===================================================================
-
 option (OPT_GPERFTOOLS "use google-perftools" OFF)
-
-option (BUILD_MAGUS    "build magus" ON)
-option (BUILD_SATPG    "build satpg" ON)
-option (BUILD_IGF      "build igf" OFF)
-option (BUILD_BNET2AIG "build bnet2aig" OFF)
-option (BUILD_MAKEBDD  "build makebdd" OFF)
 
 
 # ===================================================================
@@ -48,18 +32,8 @@ list (APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 include (FindDoxygen)
 
-find_package(BISON REQUIRED)
-
 include (FindPythonInterp)
 include (FindPythonLibs)
-
-include (FindQt4)
-find_package(Qt4 4.8.0 REQUIRED QtCore QtGui QtXml)
-#include(${QT_USE_FILE})
-
-set( CMAKE_INCLUDE_CURRENT_DIR ON )
-find_package(Qt5Widgets)
-find_package(OpenGL)
 
 find_package(TCL)
 
@@ -67,215 +41,209 @@ if ( OPT_GPERFTOOLS )
   find_package(Gperftools)
 endif (OPT_GPERFTOOLS)
 
-find_package (GTest)
-
-include (FindBZip2)
-include (FindLibLZMA)
-include (FindZLIB)
-include (FindCurses)
-
-#include (FindGMP)
-
-include (FindPOPT)
-
-include (FindReadline)
+find_package(YmTools REQUIRED)
 
 
 # ===================================================================
-# ヘッダファイルの検査
+# インクルードパスの設定
 # ===================================================================
-include (CheckIncludeFileCXX)
-check_include_file_cxx (stdlib.h    HAVE_STDLIB_H)
-check_include_file_cxx (string.h    HAVE_STRING_H)
-check_include_file_cxx (strings.h   HAVE_STRINGS_H)
-check_include_file_cxx (unistd.h    HAVE_UNISTD_H)
-check_include_file_cxx (limits.h    HAVE_LIMITS_H)
-check_include_file_cxx (float.h     HAVE_FLOAT_H)
-check_include_file_cxx (math.h      HAVE_MATH_H)
-check_include_file_cxx (sys/time.h  HAVE_SYS_TIME_H)
-check_include_file_cxx (time.h      HAVE_TIME_H)
-check_include_file_cxx (sys/stat.h  HAVE_SYS_STAT_H)
-check_include_file_cxx (pwd.h       HAVE_PWD_H)
-check_include_file_cxx (sys/param.h HAVE_SYS_PARAM_H)
-
-
-# ===================================================================
-# ライブラリ関数の検査
-# ===================================================================
-include (CheckFunctionExists)
-check_function_exists (getrusage    HAVE_GETRUSAGE)
-check_function_exists (times        HAVE_TIMES)
-
-
-# ===================================================================
-# 組み込み型のサイズの検査
-# ===================================================================
-include (CheckTypeSize)
-check_type_size (short       SHORT_SIZE)
-check_type_size (int         INT_SIZE)
-check_type_size (long        LONG_SIZE)
-check_type_size ("long long" LLONG_SIZE)
-check_type_size ("void *"    VOIDP_SIZE)
-
-if ( SHORT_SIZE EQUAL 2 )
-  set( INT16_TYPE short )
-  set( UINT16_TYPE "unsigned short" )
-elseif ( INT_SIZE EQUAL 2 )
-  set( INT16_TYPE int )
-  set( UINT16_TYPE "unsigned int" )
-else ()
-  # エラー
-  message ( FATAL_ERROR
-    "No valid type for 16-bit integer" )
-endif ()
-
-if ( SHORT_SIZE EQUAL 4 )
-  set( INT32_TYPE short )
-  set( UINT32_TYPE "unsigned short" )
-elseif ( INT_SIZE EQUAL 4 )
-  set( INT32_TYPE int )
-  set( UINT32_TYPE "unsigned int" )
-elseif ( LONG_SIZE EQUAL 4 )
-  set( INT32_TYPE long )
-  set( UINT32_TYPE "unsigned long" )
-else ()
-  # エラー
-  message ( FATAL_ERROR
-    "No valid type for 32-bit integer" )
-endif ()
-
-if ( INT_SIZE EQUAL 8 )
-  set( INT64_TYPE int )
-  set( UINT64_TYPE "unsigned int" )
-elseif ( LONG_SIZE EQUAL 8 )
-  set( INT64_TYPE long )
-  set( UINT64_TYPE "unsigned long" )
-elseif ( LLONG_SIZE EQUAL 8 )
-  set( INT64_TYPE "lon long" )
-  set( UINT64_TYPE "unsigned long long" )
-else ()
-  # エラー
-  message ( FATAL_ERROR
-    "No valid type for 64-bit integer" )
-endif ()
-
-if ( INT_SIZE EQUAL VOIDP_SIZE )
-  set( PTRINT_TYPE int )
-elseif ( LONG_SIZE EQUAL VOIDP_SIZE )
-  set( PTRINT_TYPE long )
-elseif ( LLONG_SIZE EQUAL VOIDP_SIZE )
-  set( PTRINT_TYPE "long long" )
-else ()
-  # エラー
-  message ( FATAL_ERROR
-    "No valid type for pointer size integer" )
-endif ()
-
-
-# ===================================================================
-# サブディレクトリの設定
-# ===================================================================
-add_subdirectory (libraries/libym_utils)
-add_subdirectory (libraries/libym_algo)
-add_subdirectory (libraries/libym_logic)
-add_subdirectory (libraries/libym_cell)
-add_subdirectory (libraries/libym_verilog)
-add_subdirectory (libraries/libym_networks)
+include_directories (
+  ${PROJECT_SOURCE_DIR}/include
+  ${PROJECT_BINARY_DIR}
+  ${YmTools_INCLUDE_DIRS}
+  include
+  )
 
 if (TCL_FOUND)
-  add_subdirectory (libraries/libym_tclpp)
+  include_directories ( ${TCL_INCLUDE_PATH} )
 endif (TCL_FOUND)
 
-if (BUILD_BNET2AIG)
-  add_subdirectory (programs/bnet2aig)
-endif (BUILD_BNET2AIG)
-
-if (BUILD_IGF)
-  add_subdirectory (programs/igf)
-endif (BUILD_IGF)
-
-if (BUILD_MAKEBDD)
-  add_subdirectory (programs/makebdd)
-endif (BUILD_MAKEBDD)
-
-if (BUILD_SATPG)
-  add_subdirectory (programs/satpg)
-endif (BUILD_SATPG)
-
-if (BUILD_MAGUS)
-  add_subdirectory (programs/magus)
-endif (BUILD_MAGUS)
-
 
 # ===================================================================
-# YmTools.h の生成
+#  ソースファイルの設定
 # ===================================================================
 
-configure_file(
-  "${PROJECT_SOURCE_DIR}/etc/YmTools.h.in"
-  "${PROJECT_BINARY_DIR}/YmTools.h"
+set (base_SOURCES
+  src/base/FaultMgr.cc
+  src/base/NodeSet.cc
+  src/base/NodeValList.cc
+  src/base/TestVector.cc
+  src/base/TpgFault.cc
+  src/base/TpgMap.cc
+  src/base/TpgNetwork.cc
+  src/base/TpgNode.cc
+  src/base/TvMgr.cc
+  )
+
+set (sat_engine_SOURCES
+  src/sat_engine/SatEngine.cc
+  src/sat_engine/VidLitMap.cc
+  src/sat_engine/GvalCnf.cc
+  src/sat_engine/FvalCnf.cc
+  src/sat_engine/MvalCnf.cc
+  src/sat_engine/Extractor.cc
+  src/sat_engine/LitMap.cc
+  src/sat_engine/ModelValMap.cc
+  src/sat_engine/GenVidMap.cc
+  )
+
+set (dtpg_SOURCES
+  src/dtpg/bt/BackTracer.cc
+  src/dtpg/bt/BtImpl.cc
+  src/dtpg/bt/BtJust1.cc
+  src/dtpg/bt/BtJust2.cc
+  src/dtpg/bt/BtJustBase.cc
+  src/dtpg/bt/BtSimple.cc
+
+  src/dtpg/dop/DopBase.cc
+  src/dtpg/dop/DopDrop.cc
+  src/dtpg/dop/DopDummy.cc
+  src/dtpg/dop/DopList.cc
+  src/dtpg/dop/DopTvList.cc
+  src/dtpg/dop/DopVerify.cc
+  src/dtpg/dop/FopDrop.cc
+
+  src/dtpg/main/DtpgSat.cc
+  src/dtpg/main/DtpgSatBaseM.cc
+  src/dtpg/main/DtpgSatS.cc
+  src/dtpg/main/DtpgSatM.cc
+
+  src/dtpg/uop/UopBase.cc
+  src/dtpg/uop/UopDummy.cc
+  src/dtpg/uop/UopList.cc
+  src/dtpg/uop/UopSkip.cc
+  )
+
+set (fsim_SOURCES
+  src/fsim/fop/FopKDet.cc
+
+  src/fsim/fsim2/EventQ.cc
+  src/fsim/fsim2/Fsim2.cc
+  src/fsim/fsim2/SimNode.cc
+  src/fsim/fsim2/SnAnd.cc
+  src/fsim/fsim2/SnGate.cc
+  src/fsim/fsim2/SnInput.cc
+  src/fsim/fsim2/SnOr.cc
+  src/fsim/fsim2/SnXor.cc
+
+  src/fsim/fsim3/EventQ.cc
+  src/fsim/fsim3/Fsim3.cc
+  src/fsim/fsim3/SimNode.cc
+  src/fsim/fsim3/SnAnd.cc
+  src/fsim/fsim3/SnGate.cc
+  src/fsim/fsim3/SnInput.cc
+  src/fsim/fsim3/SnOr.cc
+  src/fsim/fsim3/SnXor.cc
+  )
+
+set (graphsat_SOURCES
+  src/graphsat/AssignList.cc
+  src/graphsat/GraphSat.cc
+  src/graphsat/GraphSatR.cc
+  src/graphsat/SaBase.cc
+  src/graphsat/SaFactory.cc
+  src/graphsat/SaUIP1.cc
+  src/graphsat/SaUIP2.cc
+  src/graphsat/SatClause.cc
+  src/graphsat/VarHeap.cc
+  )
+
+set (minpat_SOURCES
+  src/minpat/DetOp.cc
+  src/minpat/Verifier.cc
+  src/minpat/MinPatBase.cc
+  src/minpat/MinPatNaive.cc
+  src/minpat/MinPatSimple.cc
+  src/minpat/MinPatSimple2.cc
+  src/minpat/MinPatDsatur.cc
+  src/minpat/MinPatDsatur2.cc
+  src/minpat/FaultAnalyzer.cc
+  src/minpat/EqChecker.cc
+  src/minpat/DomChecker.cc
+  src/minpat/ConflictChecker.cc
+  src/minpat/FgMgrBase.cc
+  src/minpat/Compactor.cc
+  src/minpat/EqSet.cc
+  src/minpat/McOp.cc
+  src/minpat/McCompactor.cc
+  )
+
+set (rtpg_SOURCES
+  src/rtpg/FopRtpg.cc
+  src/rtpg/RtpgImpl.cc
+  )
+
+set (atpg_tclsh_SOURCES
+  src/atpg_tclsh/tclAppInit.cc
+  src/atpg_tclsh/atpg_init.cc
+  src/atpg_tclsh/AtpgCmd.cc
+  src/atpg_tclsh/AtpgMgr.cc
+  src/atpg_tclsh/AtpgMsgHandler.cc
+  src/atpg_tclsh/NtwkIoCmd.cc
+  src/atpg_tclsh/PrintFaultCmd.cc
+  src/atpg_tclsh/PrintPatCmd.cc
+  src/atpg_tclsh/PrintPatStatsCmd.cc
+  src/atpg_tclsh/PrintStatsCmd.cc
+  src/atpg_tclsh/TimeCmd.cc
+  src/atpg_tclsh/RtpgCmd.cc
+  src/atpg_tclsh/DtpgCmd.cc
+  src/atpg_tclsh/MinPatCmd.cc
   )
 
 
 # ===================================================================
-# doxygen 起動用のコマンド
+#  ターゲットの設定
 # ===================================================================
+add_library(satpg_base OBJECT ${base_SOURCES})
 
-if (DOXYGEN_FOUND)
-  configure_file (
-    "${PROJECT_SOURCE_DIR}/etc/Doxyfile.in"
-    "${PROJECT_BINARY_DIR}/Doxyfile"
+add_library(satpg_sat_engine OBJECT ${sat_engine_SOURCES})
+
+add_library(satpg_dtpg OBJECT ${dtpg_SOURCES})
+
+add_library(satpg_fsim OBJECT ${fsim_SOURCES})
+
+#add_library(satpg_graphsat OBJECT ${graphsat_SOURCES})
+
+add_library(satpg_minpat OBJECT ${minpat_SOURCES})
+
+add_library(satpg_rtpg OBJECT ${rtpg_SOURCES})
+
+if (TCL_FOUND)
+  add_executable(atpg_tclsh
+    ${atpg_tclsh_SOURCES}
+    $<TARGET_OBJECTS:satpg_sat_engine>
+    $<TARGET_OBJECTS:satpg_dtpg>
+#    $<TARGET_OBJECTS:satpg_graphsat>
+    $<TARGET_OBJECTS:satpg_fsim>
+    $<TARGET_OBJECTS:satpg_minpat>
+    $<TARGET_OBJECTS:satpg_rtpg>
+    $<TARGET_OBJECTS:satpg_base>
     )
 
-  add_custom_target(dox
-    "${DOXYGEN_EXECUTABLE}" ">" "${PROJECT_BINARY_DIR}/doxygen.log"
-    DEPENDS "${PROJECT_BINARY_DIR}/Doxyfile"
-    WORKING_DIRECTORY "${PROJECT_BINARY_DIR}"
-    COMMENT "generating doxygen documents"
+  target_link_libraries(atpg_tclsh
+    ym_networks
+    ym_tclpp
+    ym_algo
+    ${TCL_LIBRARIES}
     )
-endif (DOXYGEN_FOUND)
+endif (TCL_FOUND)
 
 
 # ===================================================================
-# パッケージコンフィグレーションファイルの生成
+#  テストの設定
 # ===================================================================
 
-configure_file(
-  ${PROJECT_SOURCE_DIR}/etc/YmToolsConfig.cmake.in
-  ${PROJECT_BINARY_DIR}/YmToolsConfig.cmake
-  @ONLY
+add_executable ( satpg_simnode_test
+  src/fsim/fsim3/simnode_test.cc
+  $<TARGET_OBJECTS:satpg_fsim>
+  $<TARGET_OBJECTS:satpg_base>
   )
 
-configure_file(
-  ${PROJECT_SOURCE_DIR}/etc/YmToolsConfig-version.cmake.in
-  ${PROJECT_BINARY_DIR}/YmToolsConfig-version.cmake
-  @ONLY
-  )
-
-
-# ===================================================================
-# インストールターゲット
-# ===================================================================
-
-install (
-  FILES "${PROJECT_BINARY_DIR}/YmTools.h"
-  DESTINATION include
-  )
-
-foreach ( _header "acc_user.h" "veriuser.h" "vpi_user.h" )
-  install (
-    FILES "${PROJECT_SOURCE_DIR}/include/${_header}"
-    DESTINATION include
+target_link_libraries( satpg_simnode_test
+    ym_networks
     )
-endforeach ()
 
-install (
-  EXPORT ymtools-targets
-  DESTINATION lib/ymtools-${YMTOOLS_VERSION}
-  )
-
-install (FILES
-  ${PROJECT_BINARY_DIR}/YmToolsConfig.cmake
-  ${PROJECT_BINARY_DIR}/YmToolsConfig-version.cmake
-  DESTINATION lib/ymtools-${YMTOOLS_VERSION}
+add_test (
+  NAME satpg_simnode_test_run
+  COMMAND satpg_simnode_test
   )
