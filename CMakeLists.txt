@@ -169,15 +169,15 @@ endif ()
 # ===================================================================
 # サブディレクトリの設定
 # ===================================================================
-add_subdirectory (libraries/libym_utils)
-add_subdirectory (libraries/libym_algo)
-add_subdirectory (libraries/libym_logic)
-add_subdirectory (libraries/libym_cell)
-add_subdirectory (libraries/libym_verilog)
-add_subdirectory (libraries/libym_networks)
+add_subdirectory (libym_utils)
+add_subdirectory (libym_algo)
+add_subdirectory (libym_logic)
+add_subdirectory (libym_cell)
+add_subdirectory (libym_verilog)
+add_subdirectory (libym_networks)
 
 if (TCL_FOUND)
-  add_subdirectory (libraries/libym_tclpp)
+  add_subdirectory (libym_tclpp)
 endif (TCL_FOUND)
 
 
