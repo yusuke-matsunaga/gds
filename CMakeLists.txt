@@ -28,12 +28,6 @@ set (YMTOOLS_NAMESPACE "nsYm")
 
 option (OPT_GPERFTOOLS "use google-perftools" OFF)
 
-option (BUILD_MAGUS    "build magus" ON)
-option (BUILD_SATPG    "build satpg" ON)
-option (BUILD_IGF      "build igf" OFF)
-option (BUILD_BNET2AIG "build bnet2aig" OFF)
-option (BUILD_MAKEBDD  "build makebdd" OFF)
-
 
 # ===================================================================
 # CTest モジュールの読み込み
@@ -185,26 +179,6 @@ add_subdirectory (libraries/libym_networks)
 if (TCL_FOUND)
   add_subdirectory (libraries/libym_tclpp)
 endif (TCL_FOUND)
-
-if (BUILD_BNET2AIG)
-  add_subdirectory (programs/bnet2aig)
-endif (BUILD_BNET2AIG)
-
-if (BUILD_IGF)
-  add_subdirectory (programs/igf)
-endif (BUILD_IGF)
-
-if (BUILD_MAKEBDD)
-  add_subdirectory (programs/makebdd)
-endif (BUILD_MAKEBDD)
-
-if (BUILD_SATPG)
-  add_subdirectory (programs/satpg)
-endif (BUILD_SATPG)
-
-if (BUILD_MAGUS)
-  add_subdirectory (programs/magus)
-endif (BUILD_MAGUS)
 
 
 # ===================================================================
