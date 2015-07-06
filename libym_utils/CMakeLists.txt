@@ -135,17 +135,6 @@ set (msg_SOURCES
   src/msg/MsgMgrImpl.cc
   )
 
-set (parser_SOURCES
-  src/parser/Grammer.cc
-  src/parser/LALR1Set.cc
-  src/parser/LR0Set.cc
-  src/parser/LR0State.cc
-  src/parser/LR0Term.cc
-  src/parser/LR1Term.cc
-  src/parser/Rule.cc
-  src/parser/Token.cc
-  )
-
 if (POPT_FOUND)
   set (popt_SOURCES
     src/popt/PoptMainApp.cc
@@ -173,7 +162,6 @@ add_library(ym_utils
   ${itvl_SOURCES}
   ${misc_SOURCES}
   ${msg_SOURCES}
-  ${parser_SOURCES}
   ${popt_SOURCES}
   ${textproc_SOURCES}
   )
@@ -207,14 +195,6 @@ if (GPERFTOOLS_FOUND)
     ${GPERFTOOLS_LIBRARIES}
     )
 endif (GPERFTOOLS_FOUND)
-
-add_executable(Grammer_test
-  tests/parser/Grammer_test.cc
-  )
-
-target_link_libraries(Grammer_test
-  ym_utils
-  )
 
 
 # ===================================================================
